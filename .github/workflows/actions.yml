@@ -1,38 +1,5 @@
-# name: GitHub Actions Demo
-# run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-# on:   
-#   push:
-#     branches:
-#         - dev
-# jobs:
-#   Terraform-EC2-Provision:
-#     runs-on: ubuntu-latest     
-#     steps:
-#     # Step 1: Check out the repository code
-#     - name: Checkout Code
-#       uses: actions/checkout@v2
-
-#     # Step 2: Set up Terraform
-#     - name: Setup Terraform
-#       uses: hashicorp/setup-terraform@v1
-
-#     # Step 3: Initialize Terraform
-#     - name: Terraform Init
-#       run: terraform init
-#       env:
-#         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-#     # Step 4: Apply Terraform to provision EC2
-#     - name: Terraform Apply
-#       run: terraform apply -auto-approve
-#       working-directory: .github/workflows/terraform
-#       env:
-#         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACESS_KEY}}
-#         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
-
 name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+run-name: ${{ github.actor }} is testing out GitHub Actions 
 
 on:
   push:
