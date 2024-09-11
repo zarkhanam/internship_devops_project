@@ -60,7 +60,7 @@ resource "aws_route_table_association" "PublicRTAssociation"{
 
 resource "aws_security_group" "ic_sg" {
   name   = "IC Custom SG"
-  vpc_id = aws_vpc.ic_vpc.id
+  vpc_id = aws_vpc.AWS_VPC.id
 
 # Inbound Traffic 
 
