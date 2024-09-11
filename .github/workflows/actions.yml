@@ -54,7 +54,7 @@ jobs:
       # Step 3: Initialize Terraform
       - name: Terraform Init
         run: terraform init
-        working-directory: ./terraform  # Change this if your Terraform files are in a different folder
+        working-directory: ./terraform  
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
