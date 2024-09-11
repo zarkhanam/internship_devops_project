@@ -12,11 +12,11 @@ jobs:
     steps:
       # Step 1: Check out the repository code
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       # Step 2: Set up Terraform
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v3
 
       # Step 3: Initialize Terraform
       - name: Terraform Init
@@ -28,7 +28,9 @@ jobs:
 
       # Step 4: Apply Terraform to provision EC2
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: |
+          terraform validate
+          terraform apply -auto-approve
         working-directory: ./terraform
             
 
