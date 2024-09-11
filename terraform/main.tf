@@ -141,7 +141,7 @@ resource "aws_instance" "ic_ec2_api_server" {
   instance_type = "t2.micro"
   key_name      = aws_key_pair.key_pair.key_name
 
-  subnet_id                   = aws_subnet.ic_public_subnet.id
+  subnet_id                   = aws_subnet.Public_subnet.id
   vpc_security_group_ids      = [aws_security_group.ic_sg.id]
   associate_public_ip_address = true
 
