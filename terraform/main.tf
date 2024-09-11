@@ -137,7 +137,7 @@ resource "local_file" "private_key" {
 }
 
 resource "aws_instance" "ic_ec2_api_server" {
-  ami           = "ami-0e86e20dae9224db8"
+  ami           = "ami-05134c8ef96964280"
   instance_type = "t2.micro"
   key_name      = aws_key_pair.key_pair.key_name
 
