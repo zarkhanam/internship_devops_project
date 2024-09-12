@@ -6,7 +6,15 @@ on:
     branches:
       - dev
 
+
 jobs:
+  Ansible install:
+  runs-on: ubuntu-latest
+  steps:
+  - name: Install Ansible
+    run: sudo apt-get update && sudo apt-get install ansible -y
+ 
+ 
   Terraform-EC2-Provision:
     runs-on: ubuntu-latest
     steps:
@@ -38,8 +46,8 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_KEY }}
 
 # New Work
-      - name: Install Ansible
-        run: sudo apt-get update && sudo apt-get install ansible -y
+      # - name: Install Ansible
+      #   run: sudo apt-get update && sudo apt-get install ansible -y
 
       # - name: Run Ansible Playbook
       #   run: ansible-playbook -i ../ansible/inventory.ini ../ansible/docker_playbook.yml
