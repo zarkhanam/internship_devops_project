@@ -42,6 +42,6 @@ jobs:
         run: sudo apt-get update && sudo apt-get install ansible -y
 
       - name: Run Ansible Playbook
-        run: ansible-playbook -i ../../ansible/inventory.ini ../../ansible/docker_playbook.yml
+        run: ansible-playbook -i ../ansible/inventory.ini ../ansible/docker_playbook.yml
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
