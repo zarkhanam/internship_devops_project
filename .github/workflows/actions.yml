@@ -14,7 +14,6 @@ jobs:
   - name: Install Ansible
     run: sudo apt-get update && sudo apt-get install ansible -y
  
- 
   Terraform-EC2-Provision:
     runs-on: ubuntu-latest
     steps:
