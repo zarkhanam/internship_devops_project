@@ -136,7 +136,7 @@ resource "local_file" "private_key" {
   filename = var.key_name
 }
 
-resource "aws_instance" "ic_ec2_api_server" {
+resource "aws_instance" "ec2_server" {
   ami           = "ami-05134c8ef96964280"
   instance_type = "t2.micro"
   key_name      = aws_key_pair.key_pair.key_name
@@ -148,4 +148,21 @@ resource "aws_instance" "ic_ec2_api_server" {
   tags = {
     "Name" : "ic_ec2_instance"
   }
-} 
+
+  # provisioner "local-exec" {
+  #   command = "echo ${aws_instance.ec2_server.public_ip} >> /etc/ansible/hosts"
+  # }
+  provisioner "local-exec" {
+    command = <<EOT
+      echo "[ec2]" > ../ansible/inventory.ini
+      echo "$(terraform output -raw ec2_public_ip)" >> ../ansible/inventory.ini
+      ansible-playbook -i ../ansible/inventory.ini ../ansible/docker-playbook.yaml --private-key ./ic_key
+    EOT
+  }
+}
+
+output "ec2_public_ip" {
+  value = aws_instance.ic_ec2_api_server.public_ip
+}
+
+ 
