@@ -146,7 +146,7 @@ resource "aws_instance" "ec2_server" {
   associate_public_ip_address = true
 
   tags = {
-    "Name" : "ic_ec2_instance"
+    "Name" : "ec2_server"
   }
 
   # provisioner "local-exec" {
@@ -162,7 +162,7 @@ resource "aws_instance" "ec2_server" {
 }
 
 output "ec2_public_ip" {
-  value = aws_instance.ic_ec2_api_server.public_ip
+  value = aws_instance.ec2_server.public_ip
 }
 
  
