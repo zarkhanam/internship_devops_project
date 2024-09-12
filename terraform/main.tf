@@ -148,6 +148,48 @@ resource "aws_instance" "ec2_server" {
   tags = {
     "Name" : "ec2_server"
   }
+  user_data = <<-EOT
+            #!/bin/bash
+            sudo apt update
+            sudo apt install -y software-properties-common
+            sudo add-apt-repository --yes --update ppa:ansible/ansible
+            sudo apt install -y ansible
+
+            echo "
+            - hosts: localhost
+              become: yes
+
+              tasks:
+                - name: Install required packages
+                  apt:
+                    name:
+                      - docker.io
+                      - docker-compose
+                    state: present
+
+                - name: Start Docker service
+                  systemd:
+                    name: docker
+                    state: started
+                    enabled: yes
+
+                - name: Verify Docker installation
+                  command: docker --version
+                  register: docker_version
+
+                - debug:
+                    msg: 'Docker version: {{ docker_version.stdout }}'
+
+                - name: Verify Docker Compose installation
+                  command: docker-compose --version
+                  register: docker_compose_version
+
+                - debug:
+                    msg: 'Docker Compose version: {{ docker_compose_version.stdout }}'
+            " > /home/ubuntu/setup.yml
+
+            ansible-playbook /home/ubuntu/setup.yml
+            EOT
 
   
   # provisioner "local-exec" {
@@ -160,13 +202,13 @@ resource "aws_instance" "ec2_server" {
   #     ansible-playbook -i ../ansible/inventory.ini --user ubuntu --private-key ic_key ../ansible/docker_playbook.yml
   #   EOT
   # }
-  provisioner "local-exec" {
-  command = <<EOT
-    echo "[ec2]" > ../ansible/inventory.ini
-    echo "$(terraform output -raw ec2_public_ip) ansible_user=ubuntu" >> ../ansible/inventory.ini
-    ansible-playbook -i ../ansible/inventory.ini --private-key ./ic_key ../ansible/docker_playbook.yml
-  EOT
-  }
+  # provisioner "local-exec" {
+  # command = <<EOT
+  #   echo "[ec2]" > ../ansible/inventory.ini
+  #   echo "$(terraform output -raw ec2_public_ip) ansible_user=ubuntu" >> ../ansible/inventory.ini
+  #   ansible-playbook -i ../ansible/inventory.ini --private-key ./ic_key ../ansible/docker_playbook.yml
+  # EOT
+  # }
 
 }
 
