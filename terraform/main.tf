@@ -156,7 +156,7 @@ resource "aws_instance" "ec2_server" {
     command = <<EOT
       echo "[ec2]" > ../ansible/inventory.ini
       echo "$(terraform output -raw ec2_public_ip)" >> ../ansible/inventory.ini
-      ansible-playbook -i ../ansible/inventory.ini ../ansible/docker-playbook.yaml --private-key ./ic_key
+      ansible-playbook -i ../ansible/inventory.ini ../ansible/docker_playbook.yaml --private-key ./ic_key
     EOT
   }
 }
