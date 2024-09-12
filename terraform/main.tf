@@ -150,7 +150,6 @@ resource "aws_instance" "ec2_server" {
     "Name" : "ec2_server"
   }
 
-
   # provisioner "local-exec" {
   #   command = "echo ${aws_instance.ec2_server.public_ip} >> /etc/ansible/hosts"
   # }
