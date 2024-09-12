@@ -131,20 +131,10 @@ resource "aws_key_pair" "key_pair" {
   public_key = tls_private_key.rsa-4096.public_key_openssh
 }
 
-# resource "local_file" "private_key" {
-#   content = tls_private_key.rsa-4096.private_key_pem
-#   filename = var.key_name
-#   # filename = "terraform-key.pem"
-# }
-
 resource "local_file" "private_key" {
-  content  = tls_private_key.rsa_4096.private_key_pem
-  filename = "terraform-key.pem"
-  provisioner "local-exec" {
-    command = "chmod 400 ${self.filename}"
-  }
+  content = tls_private_key.rsa-4096.private_key_pem
+  filename = var.key_name
 }
-
 
 resource "aws_instance" "ec2_server" {
   ami           = "ami-05134c8ef96964280"
@@ -159,6 +149,7 @@ resource "aws_instance" "ec2_server" {
     "Name" : "ec2_server"
   }
 
+  
   # provisioner "local-exec" {
   #   command = "echo ${aws_instance.ec2_server.public_ip} >> /etc/ansible/hosts"
   # }
@@ -166,19 +157,16 @@ resource "aws_instance" "ec2_server" {
   #   command = <<EOT
   #     echo "[ec2]" > ../ansible/inventory.ini
   #     echo "$(terraform output -raw ec2_public_ip)" >> ../ansible/inventory.ini
-  #     ansible-playbook -i ../ansible/inventory.ini --user ubuntu --private-key terraform-key.pem ../ansible/docker_playbook.yml
-
+  #     ansible-playbook -i ../ansible/inventory.ini --user ubuntu --private-key ic_key ../ansible/docker_playbook.yml
   #   EOT
   # }
-  # provisioner "local-exec" {
-  # command = <<EOT
-  #   echo "[ec2]" > ../ansible/inventory.ini
-  #   echo "$(terraform output -raw ec2_public_ip) ansible_user=ubuntu" >> ../ansible/inventory.ini
-  #   ansible-playbook -i ../ansible/inventory.ini --private-key ./ic_key ../ansible/docker_playbook.yml
-  # EOT
-      # ansible-playbook -i ../ansible/inventory.ini --user ubuntu --private-key ic_key ../ansible/docker_playbook.yml
-
-  # }
+  provisioner "local-exec" {
+  command = <<EOT
+    echo "[ec2]" > ../ansible/inventory.ini
+    echo "$(terraform output -raw ec2_public_ip) ansible_user=ubuntu" >> ../ansible/inventory.ini
+    ansible-playbook -i ../ansible/inventory.ini --private-key ./ic_key ../ansible/docker_playbook.yml
+  EOT
+  }
 
 }
 
@@ -187,26 +175,3 @@ output "ec2_public_ip" {
 }
 
  
-resource "local_file" "inventory" {
-  depends_on = [aws_instance.ec2_server]
-
-  filename = "${path.module}/inventory.ini"
-
-  content = templatefile("${path.module}/inventory.tmpl", {
-    instance_ip = aws_instance.ec2_server.public_ip,
-    key_path = "${path.module}/terraform-key.pem"
-  })
-
-  provisioner "local-exec" {
-    command = "chmod 400 ${self.filename}"
-  }
-}
-
-resource "null_resource" "run_ansible" {
-  depends_on = [local_file.inventory]
-
-  provisioner "local-exec" {
-    command = "ansible-playbook -i ../ansible/inventory.ini ../ansible/docker-playbook.yml"
-    working_dir = path.module
-  }
-}
