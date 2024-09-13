@@ -191,25 +191,6 @@ resource "aws_instance" "ec2_server" {
             ansible-playbook /home/ubuntu/setup.yml
             EOT
 
-  
-  # provisioner "local-exec" {
-  #   command = "echo ${aws_instance.ec2_server.public_ip} >> /etc/ansible/hosts"
-  # }
-  # provisioner "local-exec" {
-  #   command = <<EOT
-  #     echo "[ec2]" > ../ansible/inventory.ini
-  #     echo "$(terraform output -raw ec2_public_ip)" >> ../ansible/inventory.ini
-  #     ansible-playbook -i ../ansible/inventory.ini --user ubuntu --private-key ic_key ../ansible/docker_playbook.yml
-  #   EOT
-  # }
-  # provisioner "local-exec" {
-  # command = <<EOT
-  #   echo "[ec2]" > ../ansible/inventory.ini
-  #   echo "$(terraform output -raw ec2_public_ip) ansible_user=ubuntu" >> ../ansible/inventory.ini
-  #   ansible-playbook -i ../ansible/inventory.ini --private-key ./ic_key ../ansible/docker_playbook.yml
-  # EOT
-  # }
-
 }
 
 output "ec2_public_ip" {
